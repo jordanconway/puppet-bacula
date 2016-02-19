@@ -16,12 +16,13 @@ class bacula::director::postgresql(
   $user               = $bacula::params::bacula_user,
 ) inherits bacula::params {
 
-  require postgresql::server
+  include postgresql::server
 
   postgresql::server::db { $db_name:
     user     => $db_user,
     password => postgresql_password($db_user, $db_pw),
     encoding => 'SQL_ASCII',
+    require  => Class['postgresql::server'],
   }
 
   file { $make_bacula_tables:
